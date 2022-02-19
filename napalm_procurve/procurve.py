@@ -946,7 +946,7 @@ class ProcurveDriver(NetworkDriver):
                     position_description = positions[0] + 1
                     position_serial_number = positions [1] + 1
                     position_final = positions [2] + 1
-                elif  len(posiciones) == 4:
+                elif  len(positions) == 4:
                     position_description = positions[1] + 1
                     position_serial_number = positions[2] + 1
                     position_final = positions[3] + 1 
