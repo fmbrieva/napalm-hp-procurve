@@ -880,3 +880,85 @@ class ProcurveDriver(NetworkDriver):
                 entry["{}{}".format(cat, key2)] = value2
         interfaces[entry["port"]] = entry
         return interfaces
+
+    def get_transceivers(self):
+        """ Get transceivers """
+
+        transceivers = []
+
+        command = "show tech transceiver"
+
+        try:
+            output = self._send_command(command)
+        except:
+            return transceivers
+
+        if "Invalid input" in output:
+            return []
+
+        try:
+            output = re.split(r"^.*--------.*$", output, flags=re.M)[1]
+        except IndexError:
+            return []
+
+        for line in output.splitlines():
+
+            if "|" in line: 
+                item = line.split("|") 
+                transceiver = {}
+                transceiver["port"] = item[0].strip() 
+                transceiver["type"] = item[1].strip() 
+                transceiver["product"] = item[2].strip() 
+                transceiver["serial_number"] = item[3].strip() 
+                transceivers.append(transceiver)
+
+        return transceivers
+
+    def get_modules(self):
+        """ Get modules """
+
+        modules = []
+
+        command = "show modules"
+
+        try:
+            output = self._send_command(command)
+        except:
+            return modules
+
+        if "Invalid input" in output:
+            return []
+
+        try:
+            output = re.split(r"^.*Slot.*$", output, flags=re.M)[1].strip()
+        except IndexError:
+            return []
+
+        positions = []
+
+        for line in output.splitlines():
+ 
+            line = line.strip()
+    
+            if "----" in line:
+                positions = [p.start() for p in re.finditer(r" ",line)]
+                if len(positions) == 3:
+                    position_description = positions[0] + 1
+                    position_serial_number = positions [1] + 1
+                    position_final = positions [2] + 1
+                elif  len(posiciones) == 4:
+                    position_description = positions[1] + 1
+                    position_serial_number = positions[2] + 1
+                    position_final = positions[3] + 1 
+                else:
+                    return modules
+                continue
+
+            module = {}
+
+            module["description"] = line[position_description:position_serial_number-1].strip()
+            module["serial-number"] = line[position_serial_number:position_final-1].strip()
+            modules.append(module)
+
+        return modules
+
