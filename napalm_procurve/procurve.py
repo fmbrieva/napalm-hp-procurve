@@ -910,6 +910,7 @@ class ProcurveDriver(NetworkDriver):
                 transceiver["type"] = item[1].strip() 
                 transceiver["product"] = item[2].strip() 
                 transceiver["serial_number"] = item[3].strip() 
+                transceiver["part"] = item[3].strip() 
                 transceivers.append(transceiver)
 
         return transceivers
@@ -957,7 +958,7 @@ class ProcurveDriver(NetworkDriver):
             module = {}
 
             module["description"] = line[position_description:position_serial_number-1].strip()
-            module["serial-number"] = line[position_serial_number:position_final-1].strip()
+            module["serial_number"] = line[position_serial_number:position_final-1].strip()
             modules.append(module)
 
         return modules
