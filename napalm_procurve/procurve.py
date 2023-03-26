@@ -232,7 +232,7 @@ class ProcurveDriver(NetworkDriver):
         show_int_br = self._send_command("show interfaces brief")
 
         stacking = False
-        if show_uptime.startswith("Stack"):
+        if show_uptime.lstrip().startswith("Stack"):
             stacking = True
             uptime_split = show_uptime.splitlines()[1].split()
             uptime_seconds = (
